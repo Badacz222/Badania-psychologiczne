@@ -1,5 +1,5 @@
 // WSTAW TU SWÓJ LINK DO GOOGLE APPS SCRIPT
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyK6QxuyFk-_Y44-42tkyh_gf8Nqh_iErEqwcwke215HPZ0uaehYe8gfYe26TfwZUT/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDG9i4w2ms2wQtYcCgiB-vNGlaNtnRjI7B80UzxjdfxPBt7SeZU5LvBTwUBfJfqp1DGg/exec";
 
 // generowanie unikalnego ID użytkownika
 function getUserId() {
@@ -11,6 +11,17 @@ function getUserId() {
     return id;
 }
 
+// BLOKADA: jeśli użytkownik już brał udział → pokazujemy komunikat
+if (!window.location.pathname.includes("loading.html")) {
+    if (localStorage.getItem("hasParticipated") === "true") {
+        document.body.innerHTML = `
+            <h2>Dziękujemy za udział w badaniu.</h2>
+            <p>Celem niniejszego testu było sprawdzenie cierpliwości użytkownika nim zdecyduje się opuścić stronę.</p>
+            <p>Państwa wynik został odnotowany.</p>
+        `;
+    }
+}
+
 function goToLoading() {
     const gender = document.getElementById("gender").value;
     const age = document.getElementById("age").value;
@@ -20,10 +31,13 @@ function goToLoading() {
         gender, age, education
     }));
 
+    // oznaczamy, że użytkownik wykonał badanie
+    localStorage.setItem("hasParticipated", "true");
+
     window.location.href = "loading.html";
 }
 
-// obsługa strony ładowania
+// OBSŁUGA STRONY ŁADOWANIA
 if (window.location.pathname.includes("loading.html")) {
 
     const startTime = Date.now();
