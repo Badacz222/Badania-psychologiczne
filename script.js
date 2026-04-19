@@ -1,5 +1,5 @@
 // WSTAW TU SWÓJ LINK DO GOOGLE APPS SCRIPT
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-xDEVHoY2uWvTup0kOWhzYxDpJ7Yc4Sna74wbSenv79MJBsHAPIJfF9zlxkmjegN4/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwyK6QxuyFk-_Y44-42tkyh_gf8Nqh_iErEqwcwke215HPZ0uaehYe8gfYe26TfwZUT/exec";
 
 // generowanie unikalnego ID użytkownika
 function getUserId() {
