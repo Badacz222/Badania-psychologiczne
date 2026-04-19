@@ -1,4 +1,15 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-xDEVHoY2uWvTup0kOWhzYxDpJ7Yc4Sna74wbSenv79MJBsHAPIJfF9zlxkmjegN4/exec";
+// WSTAW TU SWÓJ LINK DO GOOGLE APPS SCRIPT
+const SCRIPT_URL = "TU_WKLEJ_SWÓJ_LINK";
+
+// generowanie unikalnego ID użytkownika
+function getUserId() {
+    let id = localStorage.getItem("userId");
+    if (!id) {
+        id = "user-" + Math.random().toString(36).substring(2) + Date.now();
+        localStorage.setItem("userId", id);
+    }
+    return id;
+}
 
 function goToLoading() {
     const gender = document.getElementById("gender").value;
@@ -9,12 +20,12 @@ function goToLoading() {
         gender, age, education
     }));
 
-    localStorage.setItem("hasParticipated", "true");
-
     window.location.href = "loading.html";
 }
 
+// obsługa strony ładowania
 if (window.location.pathname.includes("loading.html")) {
+
     const startTime = Date.now();
 
     window.addEventListener("beforeunload", () => {
@@ -22,24 +33,16 @@ if (window.location.pathname.includes("loading.html")) {
         const timeSpent = Math.round((endTime - startTime) / 1000);
 
         const surveyData = JSON.parse(localStorage.getItem("surveyData"));
+        const userId = getUserId();
 
-        navigator.sendBeacon(SCRIPT_URL, JSON.stringify({
+        const payload = JSON.stringify({
             gender: surveyData.gender,
             age: surveyData.age,
             education: surveyData.education,
-            timeSpent: timeSpent
-        }));
+            timeSpent: timeSpent,
+            userId: userId
+        });
+
+        navigator.sendBeacon(SCRIPT_URL, payload);
     });
 }
-
-window.onload = () => {
-    if (localStorage.getItem("hasParticipated") === "true" &&
-        !window.location.pathname.includes("loading.html")) {
-
-        document.body.innerHTML = `
-            <h2>Dziękujemy za udział w badaniu.</h2>
-            <p>Celem niniejszego testu było sprawdzenie cierpliwości użytkownika nim zdecyduje się opuścić stronę.</p>
-            <p>Państwa wynik został odnotowany.</p>
-        `;
-    }
-};
